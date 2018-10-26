@@ -1,0 +1,88 @@
+<% layout('/layouts/default.html', {title: '国家级、省部级人才管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('国家级、省部级人才管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+			
+				<a href="${ctx}/talents/talents/form" id="btnAdd" class="btn btn-default btnTool" title="${text('新增国家级、省部级人才')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${talents}" action="${ctx}/talents/talents/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<#form:hidden path="baseInfoId"/>
+				<div class="form-group">
+					<label class="control-label">${text('入选时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="beselectedTime" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('人才工程项目名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="projectName" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('等级')}：</label>
+					<div class="control-inline">
+						<#form:input path="level" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('授予单位')}：</label>
+					<div class="control-inline">
+						<#form:input path="awardUnit" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+var bsId, personName;
+$(document).ready(function(){
+	var url = window.location.href;
+	var para = url.split("?");
+	var paras = para[1].split('&');
+	bsId = paras[0].split('baseInfoId=')[1];		
+	personName = paras[1].split('personName=')[1];
+	$("#btnAdd").attr("href","${ctx}/talents/talents/form?baseInfoId="+$("#baseInfoId").val()+"&personName="+personName); 
+});
+
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('入选时间')}', name:'beselectedTime', index:'a.beselected_time', width:150, align:"left", frozen:true},
+		{header:'${text('人才工程项目名称')}', name:'projectName', index:'a.project_name', width:150, align:"left"},
+		{header:'${text('等级')}', name:'level', index:'a.level', width:150, align:"left"},
+		{header:'${text('授予单位')}', name:'awardUnit', index:'a.award_unit', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			
+			actions.push('<a href="${ctx}/talents/talents/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑国家级、省部级人才')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+			actions.push('<a href="${ctx}/talents/talents/delete?id='+row.id+'" class="btnList" title="${text('删除国家级、省部级人才')}" data-confirm="${text('确认要删除该国家级、省部级人才吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

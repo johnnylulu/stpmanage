@@ -1,0 +1,92 @@
+<% layout('/layouts/default.html', {title: '所获专利管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('所获专利管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('patent:patent:edit')){ %>
+					<a href="${ctx}/patent/patent/form" class="btn btn-default btnTool" title="${text('新增所获专利')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${patent}" action="${ctx}/patent/patent/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<#form:hidden path="baseInfoId"/>
+				<div class="form-group">
+					<label class="control-label">${text('名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="name" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('专利类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="type" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('排名')}：</label>
+					<div class="control-inline">
+						<#form:input path="rank" maxlength="11" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('登记号')}：</label>
+					<div class="control-inline">
+						<#form:input path="registerNo" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('登记年月')}：</label>
+					<div class="control-inline">
+						<#form:input path="registerDate" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('转化情况')}：</label>
+					<div class="control-inline">
+						<#form:input path="conversion" maxlength="1024" class="form-control width-120"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('名称')}', name:'name', index:'a.name', width:150, align:"left"},
+		{header:'${text('专利类型')}', name:'type', index:'a.type', width:150, align:"left"},
+		{header:'${text('排名')}', name:'rank', index:'a.rank', width:150, align:"center"},
+		{header:'${text('登记号')}', name:'registerNo', index:'a.register_no', width:150, align:"left"},
+		{header:'${text('登记年月')}', name:'registerDate', index:'a.register_date', width:150, align:"left"},
+		{header:'${text('转化情况')}', name:'conversion', index:'a.conversion', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+		
+			actions.push('<a href="${ctx}/patent/patent/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑所获专利')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+			actions.push('<a href="${ctx}/patent/patent/delete?id='+row.id+'" class="btnList" title="${text('删除所获专利')}" data-confirm="${text('确认要删除该所获专利吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+		
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

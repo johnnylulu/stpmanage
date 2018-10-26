@@ -1,0 +1,78 @@
+<% layout('/layouts/default.html', {title: '工作考核记录管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('工作考核记录管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('work:workAssess:edit')){ %>
+					<a href="${ctx}/work/workAssess/form" class="btn btn-default btnTool" title="${text('新增工作考核记录')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${workAssess}" action="${ctx}/work/workAssess/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<#form:hidden path="baseInfoId"/>
+				<div class="form-group">
+					<label class="control-label">${text('考核时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="assessDate" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('考核等级')}：</label>
+					<div class="control-inline">
+						<#form:input path="assessLevel" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('考核评语')}：</label>
+					<div class="control-inline">
+						<#form:input path="remark" maxlength="1024" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('考核单位')}：</label>
+					<div class="control-inline">
+						<#form:input path="workUnit" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('考核时间')}', name:'assessDate', index:'a.assess_date', width:150, align:"center"},
+		{header:'${text('考核等级')}', name:'assessLevel', index:'a.assess_level', width:150, align:"left"},
+		{header:'${text('考核评语')}', name:'remark', index:'a.remark', width:150, align:"left"},
+		{header:'${text('考核单位')}', name:'workUnit', index:'a.work_unit', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			
+				actions.push('<a href="${ctx}/work/workAssess/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑工作考核记录')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/work/workAssess/delete?id='+row.id+'" class="btnList" title="${text('删除工作考核记录')}" data-confirm="${text('确认要删除该工作考核记录吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

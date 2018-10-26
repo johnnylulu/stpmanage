@@ -1,0 +1,130 @@
+<% layout('/layouts/default.html', {title: '人员基本信息表管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('人员基本信息表管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('person:personBaseInfo:edit')){ %>
+					<a href="${ctx}/person/personBaseInfo/form" class="btn btn-default btnTool" title="${text('新增人员基本信息表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+				<button class="btn btn-default"  onclick="reloadGrid('dataGrid')"><i class="fa fa-refresh"></i> 刷新</button>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${personBaseInfo}" action="${ctx}/person/personBaseInfo/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('姓名')}：</label>
+					<div class="control-inline">
+						<#form:input path="name" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>			
+				<div class="form-group">
+					<label class="control-label">${text('现工作单位')}：</label>
+					<div class="control-inline">
+						<#form:input path="curWorkUnit" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('职称')}：</label>
+					<div class="control-inline">
+						<#form:input path="title" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('学历')}：</label>
+					<div class="control-inline">
+						<#form:input path="education" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('姓名')}', name:'name', index:'a.name', width:180, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/person/personBaseInfo/detail?id='+row.id+'&personName='+row.name+'" class="btnList" data-title="${text('查看详细信息')}">'+(val||row.id)+'</a>';
+		}},
+		//{header:'${text('曾用名')}', name:'everName', index:'a.ever_name', width:150, align:"left"},
+		{header:'${text('性别')}', name:'sex', index:'a.sex', width:100, align:"center",formatter: function(val, obj, row, act){
+			if(val==='1') {
+				return '男';
+			} else if(val==='2') {
+				return '女 ';
+			} else {
+				return val;
+			}
+		}},		
+		{header:'${text('出生时间')}', name:'birthDate', index:'a.birth_date', width:200, align:"center"},
+		{header:'${text('籍贯')}', name:'nativePlace', index:'a.native_place', width:150, align:"left"},
+		//{header:'${text('住址')}', name:'address', index:'a.address', width:300, align:"left"},
+		//{header:'${text('国籍')}', name:'nationality', index:'a.nationality', width:150, align:"left"},
+		{header:'${text('民族')}', name:'nation', index:'a.nation', width:150, align:"left"},
+		//{header:'${text('政治面貌')}', name:'politicsStatus', index:'a.politics_status', width:180, align:"left"},
+		//{header:'${text('证件类别')}', name:'identType', index:'a.ident_type', width:180, align:"center"},
+		{header:'${text('证件号码')}', name:'identNumber', index:'a.ident_number', width:300, align:"left"},
+		{header:'${text('参加工作时间')}', name:'startworkTime', index:'a.startwork_time', width:200, align:"center"},
+		{header:'${text('现工作单位')}', name:'curWorkUnit', index:'a.cur_work_unit', width:300, align:"left"},
+		//{header:'${text('岗位')}', name:'position', index:'a.position', width:200, align:"left"},
+		{header:'${text('职称')}', name:'title', index:'a.title', width:150, align:"left"},
+		{header:'${text('学历')}', name:'education', index:'a.education', width:150, align:"left"},
+		//{header:'${text('学位')}', name:'degree', index:'a.degree', width:150, align:"left"},
+		//{header:'${text('专业')}', name:'specialty', index:'a.specialty', width:150, align:"left"},
+		{header:'${text('照片')}', name:'photo', index:'a.photo', width:150, align:"left",formatter: function(val, obj, row, act){
+			if(typeof val!='undefined' && val!=''){
+				return '<a href="${ctx}/file/download/'+val+'" class="btnList" data-title="${text('下载')}">下载</a>';	
+			}else {
+				return val;
+			}			
+		}},
+		{header:'${text('状态')}', name:'auditStatus', index:'a.auditStatus', width:150, align:"center",formatter: function(val, obj, row, act){
+			if(val==='1') {
+				return '录入';
+			} else if(val==='2') {
+				return '已核验';
+			} else if(val === '3') {
+				return '已确认';
+			} else {
+				return '未知状态';
+			}
+		}},
+		//{header:'${text('固定电话')}', name:'telephone', index:'a.telephone', width:150, align:"left"},
+		//{header:'${text('手机号码')}', name:'mobile', index:'a.mobile', width:150, align:"left"},
+		//{header:'${text('电子邮箱')}', name:'email', index:'a.email', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:160, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('person:personBaseInfo:edit')){ %>
+				actions.push('<a href="${ctx}/person/personBaseInfo/auditForm?id='+row.id+'&auditStatus='+row.auditStatus+'" class="btnList" title="${text('审核')}"><i class="fa fa-check-circle"></i></a>&nbsp;');				
+				if(row.auditStatus!='2' && row.auditStatus!='3') {
+					actions.push('<a href="${ctx}/person/personBaseInfo/form?id='+row.id+'&personName='+row.name+'" class="btnList" title="${text('编辑人员信息')}"><i class="fa fa-pencil"></i></a>&nbsp;');				
+					actions.push('<a href="${ctx}/person/personBaseInfo/delete?sid='+row.id+'" class="btnList" title="${text('删除人员基本信息表')}" data-confirm="${text('确认要删除该人员基本信息表吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');	
+				}			
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+
+function reloadGrid(gridId) {
+	$('#'+gridId).dataGrid('reloadGrid');
+}
+</script>

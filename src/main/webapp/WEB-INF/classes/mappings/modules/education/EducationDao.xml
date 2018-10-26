@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.education.dao.EducationDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="Education">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<insert id="insertEducation" keyProperty="id" useGeneratedKeys="true">
+		insert into education(base_info_id,start_date,end_date,school,education,degree,education_system,specialty,
+			is_enable,create_by,create_time)
+		values (#{baseInfoId},#{startDate},#{endDate},#{school},#{education},#{degree},#{educationSystem},#{specialty},
+			#{isEnable},#{createBy},#{createTime})
+		
+	</insert>
+</mapper>

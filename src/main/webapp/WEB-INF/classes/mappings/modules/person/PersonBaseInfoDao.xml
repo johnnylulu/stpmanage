@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.person.dao.PersonBaseInfoDao">
+	
+	<!-- 查询数据-->
+	<select id="findList" resultType="PersonBaseInfo">
+		SELECT
+			id,name,office_code,audit_status,ever_name,sex,birth_date,native_place,address,nationality,nation,
+			politics_status,ident_type,ident_number,startwork_time,cur_work_unit,position,title,education,
+			degree,specialty,photo,telephone,mobile,email,is_enable,create_by,create_time,update_by, update_time
+		FROM person_base_info
+		<where>
+		 	is_enable=1 
+		 	<if test="officeCodeList != null and officeCodeList.size() >0">
+		 		AND office_code in 
+		 	<foreach collection="officeCodeList" item="item" index="index" open="(" separator="," close=")">  
+			     #{officeCodeList[${index}]}  
+			</foreach>  		
+			</if>			
+			<if test="name != null and name != ''">
+				AND name like concat('%',#{name},'%')
+			</if>
+			<if test="curWorkUnit != null and curWorkUnit != ''">
+				AND cur_work_unit like concat('%',#{curWorkUnit},'%')
+			</if>
+			<if test="title != null and title != ''">
+				AND title like concat('%',#{title},'%')
+			</if>
+			<if test="education != null and education != ''">
+				AND education like concat('%',#{education},'%') 
+			</if>
+			
+		</where>
+		
+	</select> 
+	
+	<select id="findById" resultType="PersonBaseInfo">
+		select id,name,office_code,audit_status,ever_name,sex,birth_date,native_place,address,nationality,nation,
+			politics_status,ident_type,ident_number,startwork_time,cur_work_unit,position,title,education,
+			degree,specialty,photo,telephone,mobile,email,is_enable,create_by,create_time,update_by, update_time
+		from person_base_info where id = #{id}
+	</select>
+	
+	<insert id="insertBaseInfo" keyProperty="id" useGeneratedKeys="true">
+		insert into person_base_info(name,office_code,audit_status,ever_name,sex,birth_date,native_place,address,nationality,nation,
+			politics_status,ident_type,ident_number,startwork_time,cur_work_unit,position,title,education,
+			degree,specialty,photo,telephone,mobile,email,is_enable,create_by,create_time)
+		values  (#{name},#{officeCode},#{auditStatus},#{everName},#{sex},#{birthDate},#{nativePlace},#{address},#{nationality},#{nation},
+			#{politicsStatus},#{identType},#{identNumber},#{startworkTime},#{curWorkUnit},#{position},#{title},#{education},
+			#{degree},#{specialty},#{photo},#{telephone},#{mobile},#{email},#{isEnable},#{createBy},#{createTime})
+		
+	</insert>
+	
+	<update id="auditSave">
+		update person_base_info set audit_status = #{auditStatus} where id =#{id}
+	</update>
+	
+	<delete id="delete">
+		update person_base_info set is_enable = 0 where id =#{sid}
+	</delete>
+	
+</mapper>

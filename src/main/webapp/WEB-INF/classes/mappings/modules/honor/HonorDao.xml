@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.honor.dao.HonorDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="Honor">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<insert id="insertHonor" keyProperty="id" useGeneratedKeys="true">
+		insert into honor(base_info_id,name,department,rank,obtain_date,level,honor_attachment,
+			is_enable,create_by,create_time)
+		values (#{baseInfoId},#{name},#{department},#{rank},#{obtainDate},#{level},#{honorAtt},
+			#{isEnable},#{createBy},#{createTime})
+	</insert>
+</mapper>

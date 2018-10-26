@@ -1,0 +1,98 @@
+<% layout('/layouts/default.html', {title: '人员基本信息表管理', libs: ['validate','fileupload']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text(personBaseInfo.isNewRecord ? '审核录入信息' : '审核录入信息')}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${personBaseInfo}" action="${ctx}/person/personBaseInfo/auditSave" method="post" class="form-horizontal">
+			<div class="box-body">
+				<#form:hidden path="id"/>
+				<#form:hidden path="auditStatus"/>
+				<#form:hidden path="userOpt"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('状态')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input id="newStatus" maxlength="32" class="form-control required"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>		
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('person:personBaseInfo:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('提交')}</button>&nbsp;
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage(function(contentWindow){contentWindow.page()})"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+						
+						<button type="button" class="btn btn-sm btn-success" id="btnReset"><i class="fa fa-wrench"></i> ${text('重置')}</button>&nbsp;
+					
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+var bsId;
+$(document).ready(function(){
+	$("#newStatus").attr("readOnly",true);
+	var user = '${@UserUtils.getUser()}';
+	if(user!='system' && user!='admin') {
+		$("#btnReset").hide();
+	}
+	var url = window.location.href;
+	if(url.indexOf("?") > -1) {
+		var para = url.split("?");
+		var paras = para[1].split('&');
+		bsId = paras[0].split('id=')[1];
+		var auditStatus = paras[1].split('auditStatus=')[1];
+		if(bsId != 0 && bsId != '' && typeof auditStatus !='undefined' && auditStatus !='') {
+			$("#auditStatus").val(auditStatus);
+			if(auditStatus==='1') {				
+				$("#newStatus").val("已核验");
+				$("#btnReset").hide();
+			} else if(auditStatus==='2') {				
+				$("#newStatus").val("已确认");
+			} else if(auditStatus==='3'){
+				$("#newStatus").val("已确认");
+				$("#btnSubmit").attr('disabled',"true");
+			} else {
+				$("#newStatus").val("未知状态");
+				$("#btnSubmit").attr('disabled',"true");
+			}
+		}	
+	}	
+});
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});
+			}
+		}, "json");
+    }
+});
+
+$("#btnReset").click(function(){
+	$("#auditStatus").val(1);
+	$("#userOpt").val("reset");
+	$("#inputForm").submit();
+	$("#userOpt").val("audit");
+});
+
+</script>

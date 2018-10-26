@@ -1,0 +1,827 @@
+<% layout('/layouts/default.html', {title: '人员基本信息表管理', libs: ['validate','fileupload','dataGrid']}){ %>
+<div class="main-content">
+	
+	<!-----------------基本信息------------------>
+	<div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapsePersonBaseInfo">
+                	<i class="fa fa-map-o"></i> 基本信息
+                </a>
+            </h4>
+        </div>
+        <div id="collapsePersonBaseInfo" class="panel-collapse collapse in">
+            <div class="panel-body">
+            	<#form:form id="inputForm" model="${personBaseInfo}" action="${ctx}/person/personBaseInfo/save" method="post" class="form-horizontal">
+						<#form:hidden path="id"/>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required ">*</span> ${text('姓名')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="name" maxlength="32" class="form-control required"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('曾用名')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="everName" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('性别')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:select path="sex" dictType="sys_sex" class="form-control"/>
+									</div>							
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('出生时间')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="birthDate" readonly="true" maxlength="20" class="form-control Wdate "
+											dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('籍贯')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="nativePlace" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('住址')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="address" maxlength="256" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('国籍')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="nationality" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('民族')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="nation" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('政治面貌')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="politicsStatus" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('证件类别')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:select path="identType" dictType="sys_ident_type" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('证件号码')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="identNumber" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('参加工作时间')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="startworkTime" readonly="true" maxlength="20" class="form-control Wdate "
+											dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('现工作单位')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="curWorkUnit" maxlength="64" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('岗位')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="position" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('职称')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="title" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('学历')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="education" maxlength="16" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('学位')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="degree" maxlength="16" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('专业')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="specialty" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<label class="control-label col-sm-2" title="">
+										<span class="required hide">*</span> ${text('照片')}：<i class="fa icon-question hide"></i></label>
+									
+									<div class="col-sm-10">
+										<#form:fileupload id="uploadFile" path="photo" bizKey="${personBaseInfo.id}" bizType="photo"
+											uploadType="image" class="" readonly="false" maxUploadNum="1"/>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('固定电话')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="telephone" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('手机号码')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="mobile" maxlength="32" class="form-control"/>
+									</div>
+								</div>
+							</div>					
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label class="control-label col-sm-4" title="">
+										<span class="required hide">*</span> ${text('电子邮箱')}：<i class="fa icon-question hide"></i></label>
+									<div class="col-sm-8">
+										<#form:input path="email" maxlength="64" class="form-control"/>
+									</div>
+								</div>
+							</div>
+						</div>				
+					<div class="box-footer">
+						<div class="row">
+							<div class="col-sm-offset-2 col-sm-10">
+								<% if (hasPermi('person:personBaseInfo:edit')){ %>
+									<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
+								<% } %>
+								<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage(function(contentWindow){contentWindow.page()})"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+							</div>
+						</div>
+					</div>
+				</#form:form>	
+            </div>
+        </div>
+    </div>
+    <!-----------------国家级、省部级人才------------------>
+	<div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTalent">
+                	<i class="fa fa-map-o"></i> 国家级、省部级人才
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTalent" class="panel-collapse collapse">
+            <div class="panel-body">
+            	<a href="${ctx}/talents/talents/form" id="btnAddTalent" class="btn btn-default btnTool" title="${text('新增国家级、省部级人才')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+                <button class="btn btn-default"  onclick="reloadGrid('dataGridTalent')"><i class="fa fa-refresh"></i> 刷新</button>
+                <table id="dataGridTalent"></table>
+				<div id="dataGridTalentPage"></div>
+            </div>
+        </div>
+    </div>
+    <!-----------------学习经历------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseEducation">
+                	<i class="fa fa-map-o"></i> 学习经历
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseEducation" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/education/education/form" id="btnAddEducation" class="btn btn-default btnTool" title="${text('学习经历')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridEducation')"><i class="fa fa-refresh"></i> ${text('刷新')}</button>
+            <table id="dataGridEducation"></table>
+			<div id="dataGridEducationPage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------专业技术资格------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseQualification">
+                	<i class="fa fa-map-o"></i> 专业技术资格
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseQualification" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/qualification/qualification/form" id="btnAddQualification" class="btn btn-default btnTool" title="${text('专业技术资格')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridQualification')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridQualification"></table>
+			<div id="dataGridQualificationPage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------职称------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseTitle">
+                	<i class="fa fa-map-o"></i> 职称
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseTitle" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/title/title/form" id="btnAddTitle" class="btn btn-default btnTool" title="${text('职称')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridTitle')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridTitle"></table>
+			<div id="dataGridTitlePage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------工作履历------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseWorkRecord">
+                	<i class="fa fa-map-o"></i> 工作履历
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseWorkRecord" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/work/workRecord/form" id="btnAddWorkRecord" class="btn btn-default btnTool" title="${text('工作履历')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridWorkRecord')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridWorkRecord"></table>
+			<div id="dataGridWorkRecordPage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------工作考核记录------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseWorkAssess">
+                	<i class="fa fa-map-o"></i> 工作考核记录
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseWorkAssess" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/work/workAssess/form" id="btnAddWorkAssess" class="btn btn-default btnTool" title="${text('工作考核记录')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridWorkAssess')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridWorkAssess"></table>
+			<div id="dataGridWorkAssessPage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------参加学术团体经历------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseAcademicOrganization">
+                	<i class="fa fa-map-o"></i> 参加学术团体经历
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseAcademicOrganization" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/academic/academicOrganization/form" id="btnAddAcademicOrganization" class="btn btn-default btnTool" title="${text('参加学术团体经历')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridAcademicOrganization')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridAcademicOrganization"></table>
+			<div id="dataGridAcademicOrganizationPage"></div>
+        </div>
+        </div>
+    </div>
+	<!-----------------论著------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseTreatise">
+                	<i class="fa fa-map-o"></i> 论著
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseTreatise" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/treatise/treatise/form" id="btnAddTreatise" class="btn btn-default btnTool" title="${text('论著')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridTreatise')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridTreatise"></table>
+			<div id="dataGridTreatisePage"></div>
+        </div>
+        </div>
+    </div>
+	<!-----------------参与的课题------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseProject">
+                	<i class="fa fa-map-o"></i> 参与的课题
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseProject" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/project/project/form" id="btnAddProject" class="btn btn-default btnTool" title="${text('参与的课题')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridProject')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridProject"></table>
+			<div id="dataGridProjectPage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------所获专利------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapsePatent">
+                	<i class="fa fa-map-o"></i> 所获专利
+            	</a>
+            </h4>
+        </div>
+        <div id="collapsePatent" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/patent/patent/form" id="btnAddPatent" class="btn btn-default btnTool" title="${text('所获专利')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridPatent')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridPatent"></table>
+			<div id="dataGridPatentPage"></div>
+        </div>
+        </div>
+    </div>
+    <!-----------------奖励和荣誉------------------>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"  href="#collapseHonor">
+                	<i class="fa fa-map-o"></i> 奖励和荣誉
+            	</a>
+            </h4>
+        </div>
+        <div id="collapseHonor" class="panel-collapse collapse">
+        <div class="panel-body">
+          	<a href="${ctx}/honor/honor/form" id="btnAddHonor" class="btn btn-default btnTool" title="${text('奖励和荣誉')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+            <button class="btn btn-default"  onclick="reloadGrid('dataGridHonor')"><i class="fa fa-refresh"></i> 刷新</button>
+            <table id="dataGridHonor"></table>
+			<div id="dataGridHonorPage"></div>
+        </div>
+        </div>
+    </div>
+    
+</div>
+
+<% } %>
+<script>
+$(document).ready(function(){
+	if($("#id").val()==null || $("#id").val()=='') {
+		$("#id").val('0');	
+	} else {
+		initAddBtnHref();
+	}	
+});
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				if(typeof data.data != 'undefined' && data.data!=null && typeof data.data.id !='undefined') {
+					$("#id").val(data.data.id);
+				}
+				initAddBtnHref();
+			}
+		}, "json");
+    }
+});
+
+// 初始化新增资料按钮的链接
+function initAddBtnHref() {
+	$("#btnAddTalent").attr("href","${ctx}/talents/talents/form?baseInfoId="+$("#id").val()); 
+	$("#btnAddEducation").attr("href","${ctx}/education/education/form?baseInfoId="+$("#id").val());
+	$("#btnAddQualification").attr("href","${ctx}/qualification/qualification/form?baseInfoId="+$("#id").val());
+	$("#btnAddTitle").attr("href","${ctx}/title/title/form?baseInfoId="+$("#id").val());
+	$("#btnAddWorkRecord").attr("href","${ctx}/work/workRecord/form?baseInfoId="+$("#id").val());
+	$("#btnAddWorkAssess").attr("href","${ctx}/work/workAssess/form?baseInfoId="+$("#id").val());
+	$("#btnAddAcademicOrganization").attr("href","${ctx}/academic/academicOrganization/form?baseInfoId="+$("#id").val());
+	$("#btnAddTreatise").attr("href","${ctx}/treatise/treatise/form?baseInfoId="+$("#id").val());
+	$("#btnAddProject").attr("href","${ctx}/project/project/form?baseInfoId="+$("#id").val());
+	$("#btnAddPatent").attr("href","${ctx}/patent/patent/form?baseInfoId="+$("#id").val());
+	$("#btnAddHonor").attr("href","${ctx}/honor/honor/form?baseInfoId="+$("#id").val());
+}
+
+function reloadGrid(gridId) {
+	$('#'+gridId).dataGrid('reloadGrid');
+}
+
+function closeWindow() {
+	js.closeCurrentTabPage(function(contentWindow){
+		contentWindow.page()
+	})
+}
+
+//------------国家级、省部级人才Grid-------------
+$('#collapseTalent').on('show.bs.collapse', function () {
+	//初始化DataGrid对象
+	$('#dataGridTalent').dataGrid({
+		url:'${ctx}/talents/talents/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('入选时间')}', name:'beselectedTime', index:'a.beselected_time', width:150, align:"left", frozen:true},
+			{header:'${text('人才工程项目名称')}', name:'projectName', index:'a.project_name', width:150, align:"left"},
+			{header:'${text('等级')}', name:'level', index:'a.level', width:150, align:"left"},
+			{header:'${text('授予单位')}', name:'awardUnit', index:'a.award_unit', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/talents/talents/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑国家级、省部级人才')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/talents/talents/delete?id='+row.id+'" class="btnList" title="${text('删除国家级、省部级人才')}" data-confirm="${text('确认要删除该国家级、省部级人才吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------学习经历Grid-------------
+$('#collapseEducation').on('show.bs.collapse', function () {
+	$('#dataGridEducation').dataGrid({
+		url:'${ctx}/education/education/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [		
+			{header:'${text('起始年月')}', name:'startDate', index:'a.start_date', width:150, align:"left"},
+			{header:'${text('终止年月')}', name:'endDate', index:'a.end_date', width:150, align:"left"},
+			{header:'${text('毕业学校')}', name:'school', index:'a.school', width:150, align:"left"},
+			{header:'${text('学历')}', name:'education', index:'a.education', width:150, align:"left"},
+			{header:'${text('学位')}', name:'degree', index:'a.degree', width:150, align:"left"},
+			{header:'${text('学制')}', name:'educationSystem', index:'a.education_system', width:150, align:"left"},
+			{header:'${text('专业')}', name:'specialty', index:'a.specialty', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/education/education/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑学习经历')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/education/education/delete?id='+row.id+'" class="btnList" title="${text('删除学习经历')}" data-confirm="${text('确认要删除该学习经历吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------专业技术资格Grid-------------
+$('#collapseQualification').on('show.bs.collapse', function () {
+	$('#dataGridQualification').dataGrid({
+		url:'${ctx}/qualification/qualification/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('资格名称')}', name:'name', index:'a.name', width:150, align:"left"},
+			{header:'${text('颁发部门')}', name:'department', index:'a.department', width:150, align:"left"},
+			{header:'${text('取得时间')}', name:'obtainTime', index:'a.obtain_time', width:150, align:"center"},
+			{header:'${text('附件')}', name:'qualificationAtt', index:'a.qualification_attachment', width:150, align:"left",formatter: function(val, obj, row, act){
+				if(typeof val!='undefined' && val!=''){
+					var files = val.split(',');
+					var html='';
+					for(var i=0;i<files.length;i++) {
+						html+= '<a href="${ctx}/file/download/'+files[i]+'" class="btnList" data-title="${text('下载')}"> 附件'+(i+1)+'</a>';							
+					}
+					return html;							
+				}else {
+					return val;
+				}			
+			}},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/qualification/qualification/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑专业技术资格')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/qualification/qualification/delete?id='+row.id+'" class="btnList" title="${text('删除专业技术资格')}" data-confirm="${text('确认要删除该专业技术资格吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------职称Grid-------------
+$('#collapseTitle').on('show.bs.collapse', function () {
+	$('#dataGridTitle').dataGrid({
+		url:'${ctx}/title/title/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('职称名称')}', name:'name', index:'a.name', width:150, align:"left"},
+			{header:'${text('颁发部门')}', name:'department', index:'a.department', width:150, align:"left"},
+			{header:'${text('工作单位')}', name:'workUnit', index:'a.work_unit', width:150, align:"left"},
+			{header:'${text('附件')}', name:'titleAtt', index:'a.attachment', width:150, align:"left",formatter: function(val, obj, row, act){
+				if(typeof val!='undefined' && val!=''){
+					var files = val.split(',');
+					var html='';
+					for(var i=0;i<files.length;i++) {
+						html+= '<a href="${ctx}/file/download/'+files[i]+'" class="btnList" data-title="${text('下载')}"> 附件'+(i+1)+'</a>';							
+					}
+					return html;							
+				}else {
+					return val;
+				}			
+			}},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/title/title/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑职称')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/title/title/delete?id='+row.id+'" class="btnList" title="${text('删除职称')}" data-confirm="${text('确认要删除职称吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------工作履历Grid-------------
+$('#collapseWorkRecord').on('show.bs.collapse', function () {
+	$('#dataGridWorkRecord').dataGrid({
+		url:'${ctx}/work/workRecord/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('起始年月')}', name:'startDate', index:'a.start_date', width:150, align:"left"},
+			{header:'${text('截止年月')}', name:'endDate', index:'a.end_date', width:150, align:"left"},
+			{header:'${text('工作单位')}', name:'workUnit', index:'a.work_unit', width:150, align:"left"},
+			{header:'${text('职务')}', name:'duty', index:'a.duty', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/work/workRecord/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑工作履历')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/work/workRecord/delete?id='+row.id+'" class="btnList" title="${text('删除工作履历')}" data-confirm="${text('确认要删除该工作履历吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------工作考核记录Grid-------------
+$('#collapseWorkAssess').on('show.bs.collapse', function () {
+	$('#dataGridWorkAssess').dataGrid({
+		url:'${ctx}/work/workAssess/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('考核时间')}', name:'assessDate', index:'a.assess_date', width:150, align:"center"},
+			{header:'${text('考核等级')}', name:'assessLevel', index:'a.assess_level', width:150, align:"left"},
+			{header:'${text('考核评语')}', name:'remark', index:'a.remark', width:150, align:"left"},
+			{header:'${text('考核单位')}', name:'workUnit', index:'a.work_unit', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/work/workAssess/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑工作考核记录')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/work/workAssess/delete?id='+row.id+'" class="btnList" title="${text('删除工作考核记录')}" data-confirm="${text('确认要删除该工作考核记录吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------参加学术团体经历Grid-------------
+$('#collapseAcademicOrganization').on('show.bs.collapse', function () {
+	$('#dataGridAcademicOrganization').dataGrid({
+		url:'${ctx}/academic/academicOrganization/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('起始年月')}', name:'startDate', index:'a.start_date', width:150, align:"left"},
+			{header:'${text('截止年月')}', name:'endDate', index:'a.end_date', width:150, align:"left"},
+			{header:'${text('机构名称')}', name:'orgName', index:'a.org_name', width:150, align:"left"},
+			{header:'${text('担任职务')}', name:'duty', index:'a.duty', width:150, align:"left"},
+			{header:'${text('工作职责')}', name:'responsibility', index:'a.responsibility', width:150, align:"left"},
+			{header:'${text('工作内容')}', name:'workContent', index:'a.work_content', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/academic/academicOrganization/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑参加学术团体经历')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/academic/academicOrganization/delete?id='+row.id+'" class="btnList" title="${text('删除参加学术团体经历')}" data-confirm="${text('确认要删除该参加学术团体经历吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------论著Grid-------------
+$('#collapseTreatise').on('show.bs.collapse', function () {
+	$('#dataGridTreatise').dataGrid({
+		url:'${ctx}/treatise/treatise/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('论著名称')}', name:'name', index:'a.name', width:150, align:"left"},
+			{header:'${text('出版社名称')}', name:'publishingHouse', index:'a.publishing_house', width:150, align:"left"},
+			{header:'${text('个人排名')}', name:'rank', index:'a.rank', width:150, align:"center"},
+			{header:'${text('出版年月')}', name:'publishDate', index:'a.publish_date', width:150, align:"left"},
+			{header:'${text('著作级别')}', name:'level', index:'a.level', width:150, align:"left"},		
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/treatise/treatise/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑论著')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/treatise/treatise/delete?id='+row.id+'" class="btnList" title="${text('删除论著')}" data-confirm="${text('确认要删除该论著吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------参与的课题Grid-------------
+$('#collapseProject').on('show.bs.collapse', function () {
+	$('#dataGridProject').dataGrid({
+		url:'${ctx}/project/project/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('课题名称')}', name:'name', index:'a.name', width:150, align:"left"},
+			{header:'${text('课题简介')}', name:'intro', index:'a.intro', width:150, align:"left"},
+			{header:'${text('工作职责')}', name:'responsibility', index:'a.responsibility', width:150, align:"left"},
+			{header:'${text('工作内容')}', name:'workContent', index:'a.work_content', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/project/project/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑参与的课题')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/project/project/delete?id='+row.id+'" class="btnList" title="${text('删除参与的课题')}" data-confirm="${text('确认要删除该参与的课题吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+
+//------------所获专利Grid-------------
+$('#collapsePatent').on('show.bs.collapse', function () {
+	$('#dataGridPatent').dataGrid({
+		url:'${ctx}/patent/patent/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('名称')}', name:'name', index:'a.name', width:150, align:"left"},
+			{header:'${text('专利类型')}', name:'type', index:'a.type', width:150, align:"left"},
+			{header:'${text('排名')}', name:'rank', index:'a.rank', width:150, align:"center"},
+			{header:'${text('登记号')}', name:'registerNo', index:'a.register_no', width:150, align:"left"},
+			{header:'${text('登记年月')}', name:'registerDate', index:'a.register_date', width:150, align:"left"},
+			{header:'${text('转化情况')}', name:'conversion', index:'a.conversion', width:150, align:"left"},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+			
+				actions.push('<a href="${ctx}/patent/patent/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑所获专利')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/patent/patent/delete?id='+row.id+'" class="btnList" title="${text('删除所获专利')}" data-confirm="${text('确认要删除该所获专利吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+//------------奖励和荣誉Grid-------------
+$('#collapseHonor').on('show.bs.collapse', function () {
+	$('#dataGridHonor').dataGrid({
+		url:'${ctx}/honor/honor/listData?baseInfoId='+$("#id").val(),
+		mtype: "POST", 
+		datatype: "json",
+		columnModel: [
+			{header:'${text('名称')}', name:'name', index:'a.name', width:150, align:"left"},
+			{header:'${text('颁发部门')}', name:'department', index:'a.department', width:150, align:"left"},
+			{header:'${text('排名')}', name:'rank', index:'a.rank', width:150, align:"center"},
+			{header:'${text('获奖年月')}', name:'obtainDate', index:'a.obtain_date', width:150, align:"left"},
+			{header:'${text('等级')}', name:'level', index:'a.level', width:150, align:"left"},
+			{header:'${text('附件')}', name:'honorAtt', index:'a.attachment', width:150, align:"left",formatter: function(val, obj, row, act){
+				if(typeof val!='undefined' && val!=''){
+					var files = val.split(',');
+					var html='';
+					for(var i=0;i<files.length;i++) {
+						html+= '<a href="${ctx}/file/download/'+files[i]+'" class="btnList" data-title="${text('下载')}"> 附件'+(i+1)+'</a>';							
+					}
+					return html;							
+				}else {
+					return val;
+				}			
+			}},
+			{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+				var actions = [];
+				actions.push('<a href="${ctx}/honor/honor/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑奖励和荣誉')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/honor/honor/delete?id='+row.id+'" class="btnList" title="${text('删除奖励和荣誉')}" data-confirm="${text('确认要删除该奖励和荣誉吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				return actions.join('');
+			}}
+		],
+		// 加载成功后执行事件
+		ajaxSuccess: function(data){
+			
+		}
+	});
+});
+</script>

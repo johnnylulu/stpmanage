@@ -1,0 +1,97 @@
+<% layout('/layouts/default.html', {title: '参与的课题管理', libs: ['validate','dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text(project.isNewRecord ? '参与的课题' : '参与的课题')}<a id="personName"></a>
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${project}" action="${ctx}/project/project/save" method="post" class="form-horizontal">
+			<div class="box-body">
+			<div class="form-unit">${text('信息录入')}</div>
+				<#form:hidden path="id"/>
+				<#form:hidden path="baseInfoId"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('课题名称')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="name" maxlength="64" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('课题简介')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="intro" maxlength="1024" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('工作职责')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="responsibility" maxlength="256" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('工作内容')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="workContent" maxlength="256" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;				
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+						<a id="nextStep" href="${ctx}/patent/patent/form?baseInfoId=0&personName=空" class="btn btn-default btnTool" data-title="${text('所获专利')}"><i class="fa fa-hand-o-right"></i> ${text('下一步')}</a>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+var bsId='';
+$(document).ready(function(){
+	var url = window.location.href;
+	var para = url.split("?");
+	var paras = para[1].split('&');
+	bsId = paras[0].split('baseInfoId=')[1];		
+});
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		if(bsId == 0 || bsId == '' ) {
+			js.showMessage("请先录入人员基本信息!")
+			return false;	
+		}
+		$("#baseInfoId").val(bsId);
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});						
+			}
+		}, "json");
+    }
+});
+</script>

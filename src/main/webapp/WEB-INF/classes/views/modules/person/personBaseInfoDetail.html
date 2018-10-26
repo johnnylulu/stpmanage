@@ -1,0 +1,62 @@
+<% layout('/layouts/default.html', {title: '查看详细信息', libs: ['validate']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text(personBaseInfo.isNewRecord ? '查看详细信息' : '查看详细信息')}<a id="personName"></a>
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<a id="talents" href="${ctx}/talents/talents/list" class="list-group-item btnList" title="${text('国家级、省部级人才')}">国家级、省部级人才</a>
+		<a id="education" href="${ctx}/education/education/list" class="list-group-item" title="${text('学习经历')}">学习经历</a>
+		<a id="qualification" href="${ctx}/qualification/qualification/list" class="list-group-item" title="${text('专业技术资格')}">专业技术资格</a>
+		<a id="title" href="${ctx}/title/title/list" class="list-group-item" title="${text('职称')}">职称</a>		
+		<a id="workRecord" href="${ctx}/work/workRecord/list" class="list-group-item" title="${text('工作履历')}">工作履历</a>
+		<a id="workAssess" href="${ctx}/work/workAssess/list" class="list-group-item" title="${text('工作考核记录')}">工作考核记录</a>		
+		<a id="academicOrganization" href="${ctx}/academic/academicOrganization/list" class="list-group-item" title="${text('参加学术团体经历')}">参加学术团体经历</a>
+		<a id="treatise" href="${ctx}/treatise/treatise/list" class="list-group-item" title="${text('论著')}">论著</a>
+		<a id="project" href="${ctx}/project/project/list" class="list-group-item" title="${text('参与的课题')}">参与的课题</a>
+		<a id="patent" href="${ctx}/patent/patent/list" class="list-group-item" title="${text('所获专利')}">所获专利</a>
+		<a id="honor" href="${ctx}/honor/honor/list" class="list-group-item" title="${text('奖励和荣誉')}">奖励和荣誉</a>
+	</div>
+</div>
+<% } %>
+<script>
+var bsId;
+$(document).ready(function(){
+	var url = window.location.href;
+	var para = url.split("?");
+	var paras = para[1].split('&');
+	bsId = paras[0].split('id=')[1];
+	var personName = paras[1].split('personName=')[1];	
+	if(bsId != 0 && bsId != '') {
+		$("#personName").text('(姓名:'+decodeURI(personName)+')');
+		$("#talents").attr("href","${ctx}/talents/talents/list?baseInfoId="+bsId+"&personName="+personName); 
+		$("#education").attr("href","${ctx}/education/education/list?baseInfoId="+bsId+"&personName="+personName); 
+		$("#qualification").attr("href","${ctx}/qualification/qualification/list?baseInfoId="+bsId+"&personName="+personName);
+		$("#title").attr("href","${ctx}/title/title/list?baseInfoId="+bsId+"&personName="+personName);		
+		$("#workRecord").attr("href","${ctx}/work/workRecord/list?baseInfoId="+bsId+"&personName="+personName);
+		$("#workAssess").attr("href","${ctx}/work/workAssess/list?baseInfoId="+bsId+"&personName="+personName);
+		$("#academicOrganization").attr("href","${ctx}/academic/academicOrganization/list?baseInfoId="+bsId+"&personName="+personName);		
+		$("#treatise").attr("href","${ctx}/treatise/treatise/list?baseInfoId="+bsId+"&personName="+personName);
+		$("#project").attr("href","${ctx}/project/project/list?baseInfoId="+bsId+"&personName="+personName);
+		$("#patent").attr("href","${ctx}/patent/patent/list?baseInfoId="+bsId+"&personName="+personName);
+		$("#honor").attr("href","${ctx}/honor/honor/list?baseInfoId="+bsId+"&personName="+personName);
+	}
+});
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			if(data.result == Global.TRUE){
+				//js.closeCurrentTabPage(function(contentWindow){
+					//contentWindow.page();
+				//});
+			}
+		}, "json");
+    }
+});
+
+</script>

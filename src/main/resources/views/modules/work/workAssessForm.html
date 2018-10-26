@@ -1,0 +1,107 @@
+<% layout('/layouts/default.html', {title: '工作考核记录管理', libs: ['validate','dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text(workAssess.isNewRecord ? '工作考核记录' : '工作考核记录')}<a id="personName"></a>
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${workAssess}" action="${ctx}/work/workAssess/save" method="post" class="form-horizontal">
+			<div class="box-body">
+			<div class="form-unit">${text('信息录入')}</div>
+				<#form:hidden path="id"/>
+				<#form:hidden path="baseInfoId"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('考核时间')}：<i class="fa icon-question hide"></i></label>
+								<div class="col-sm-8">
+									<#form:input path="assessDate" readonly="true" maxlength="20" class="form-control Wdate "
+										dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+								</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('考核等级')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="assessLevel" maxlength="16" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('考核评语')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="remark" maxlength="1024" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('考核单位')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="workUnit" maxlength="64" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						
+						<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;						
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+						<a id="nextStep" href="${ctx}/academic/academicOrganization/form?baseInfoId=0&personName=空" class="btn btn-default btnTool" data-title="${text('参加学术团体经历')}"><i class="fa fa-hand-o-right"></i> ${text('下一步')}</a>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+		<div class="form-unit">${text('当前数据')}</div>
+		<#form:form id="searchForm" model="${workAssess}" action="${ctx}/work/workAssess/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+			<#form:hidden path="baseInfoId"/>
+		</#form:form>
+		<table id="dataGrid"></table>
+		<div id="dataGridPage"></div>
+	</div>
+</div>
+<% } %>
+<script>
+var bsId='';
+$(document).ready(function(){
+	var url = window.location.href;
+	var para = url.split("?");
+	var paras = para[1].split('&');
+	bsId = paras[0].split('baseInfoId=')[1];		
+});
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		if(bsId == 0 || bsId == '' ) {
+			js.showMessage("请先录入人员基本信息!")
+			return false;	
+		}
+		$("#baseInfoId").val(bsId);
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});						
+			}
+		}, "json");
+    }
+});
+</script>

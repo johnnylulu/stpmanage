@@ -1,0 +1,280 @@
+<% layout('/layouts/default.html', {title: '机构管理', libs: ['validate','dataGrid','fileupload']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa icon-grid"></i> ${text(office.isNewRecord ? '新增机构' : '编辑机构')}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${office}" action="${ctx}/sys/office/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<div class="form-unit">${text('基本信息')}</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4">${text('上级机构')}：</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="parent" title="${text('上级机构')}"
+									path="parent.id" labelPath="parent.officeName" 
+									url="${ctx}/sys/office/treeData?excludeCode=${office.id}"
+									class="" allowClear="true" canSelectRoot="true" canSelectParent="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('机构名称')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="officeName" maxlength="100" class="form-control required "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('机构代码')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:hidden path="isNewRecord"/>
+								<#form:hidden path="officeCode"/>
+								<#form:input path="viewCode" maxlength="64" readonly="${!office.isNewRecord}" class="form-control required abc"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('机构全称')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="fullName" maxlength="200" class="form-control required "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('排序号')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="treeSort" maxlength="10" class="form-control required digits"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('机构类型')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:select path="officeType" dictType="sys_office_type" class="form-control required " />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								 ${text('附件')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+								<#form:fileupload id="uploadFile" path="officeAttachment" bizKey="${office.officeCode}" bizType="officeAttachment"
+									uploadType="all" class="" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-unit">${text('详细信息')}</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('负责人')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="leader" maxlength="100" class="form-control "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('办公电话')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="phone" maxlength="100" class="form-control phone"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('联系地址')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="address" maxlength="255" class="form-control "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('邮政编码')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="zipCode" maxlength="100" class="form-control zipCode"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('电子邮箱')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="email" maxlength="300" class="form-control email"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								<span class="required hide">*</span> ${text('备注信息')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+								<#form:textarea path="remarks" rows="4" maxlength="500" class="form-control "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-unit">${text('岗位配置')}</div>
+				<a href="${ctx}/office/officePost/form" id="addOfficePostBtn" class="btn btn-default btnTool" title="${text('新增机构岗位配置')}"><i class="fa fa-plus"></i> ${text('新增岗位配置')}</a>				
+				<table id="dataGrid"></table>
+				<div id="dataGridPage"></div>
+				<#form:extend collapsed="true" />
+			</div>			
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('sys:office:edit')){ %>
+							<button type="button" class="btn btn-sm btn-danger" id="btnLock"><i class="fa fa-lock"></i> ${text('加锁')}</button>&nbsp;
+						<% } %>
+						<% if (hasPermi('sys:office:edit')){ %>
+							<button type="button" class="btn btn-sm btn-success" id="btnUnLock"><i class="fa fa-unlock"></i> ${text('解锁')}</button>&nbsp;
+						<% } %>
+						<% if (hasPermi('sys:office:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+$(document).ready(function(){
+	$("#addOfficePostBtn").attr("href","${ctx}/office/officePost/form?officeCode="+$("#officeCode").val());
+	$("#extend_extendS3").attr("readonly","readonly");
+	var lock = $("#extend_extendS3").val();
+	if(lock == 'lock') {
+		$('#btnLock').addClass('disabled');
+		$('#btnSubmit').addClass('disabled');	
+	} else if(lock=='unlock') {
+		$('#btnUnLock').addClass('disabled');	
+	}
+});
+
+$("#btnLock").click(function(){
+	var lock = $("#extend_extendS3").val();
+	if(lock=='' || lock=='unlock') {
+		js.confirm('确认锁住该记录吗？', '${ctx}/sys/office/lock',{officeCode:$("#officeCode").val()}, function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				//加锁按钮失效
+				$('#btnLock').addClass('disabled');
+				$('#btnSubmit').addClass('disabled');
+				$('#btnUnLock').removeClass('disabled');
+				$("#extend_extendS3").val('lock')
+			}
+		});	
+	}
+});
+
+$("#btnUnLock").click(function(){
+	var lock = $("#extend_extendS3").val();
+	if(lock=='lock') {
+		js.confirm('确认解锁该记录吗？', '${ctx}/sys/office/unlock',{officeCode:$("#officeCode").val()}, function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				//解锁按钮失效
+				$('#btnUnLock').addClass('disabled');
+				$('#btnLock').removeClass('disabled');
+				$('#btnSubmit').removeClass('disabled');
+				$("#extend_extendS3").val('unlock')				
+			}
+		});	
+	}
+});
+
+$("#inputForm").validate({
+	submitHandler: function(form){
+		var lock = $("#extend_extendS3").val();
+		if(lock=='lock') {
+			return;
+		}
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.$('#dataGrid').dataGrid('refreshTreeChildren',
+							$('#parentCode').val(), '${office.id}');
+				});
+			}
+		}, "json");
+    }
+});
+$('#officeName').change(function(){
+	if ($('#fullName').val()==''){
+		$('#fullName').val($(this).val());
+	}
+});
+// 选择父级菜单回调方法
+function treeselectCallback(id, act, index, layero){
+	if (id == 'parent' && (act == 'ok' || act == 'clear')){
+		// 创建并初始化下一个节点信息，如：排序号、默认值
+		$.get('${ctx}/sys/office/createNextNode?parentCode='
+				+$('#parentCode').val(), function(data){
+			$('#treeSort').val(data.treeSort);
+		});
+	}
+}
+
+$('#dataGrid').dataGrid({
+	url:'${ctx}/office/officePost/listData?officeCode='+$("#officeCode").val(),
+	mtype: "POST", 
+	datatype: "json",
+	columnModel: [
+		{header:'${text('岗位名称')}', name:'name', index:'a.name', width:150, align:"left", frozen:true},
+		{header:'${text('标准配置人数')}', name:'standardNum', index:'a.standardNum', width:150, align:"left"},
+		{header:'${text('实际人数')}', name:'realNum', index:'a.realNum', width:150, align:"left"},
+		{header:'${text('备注')}', name:'remark', index:'a.remark', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			actions.push('<a href="${ctx}/office/officePost/form?id='+row.id+'" class="btnList" title="${text('编辑岗位配置')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+			actions.push('<a href="${ctx}/office/officePost/delete?id='+row.id+'" class="btnList" title="${text('删除岗位配置')}" data-confirm="${text('确认要删除该岗位配置吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+
+</script>

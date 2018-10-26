@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.title.dao.TitleDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="Title">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<insert id="insertTitle" keyProperty="id" useGeneratedKeys="true">
+		insert into title(base_info_id,name,department,work_unit,title_attachment,
+			is_enable,create_by,create_time)
+		values (#{baseInfoId},#{name},#{department},#{workUnit},#{titleAtt},
+			#{isEnable},#{createBy},#{createTime})
+		
+	</insert>
+</mapper>

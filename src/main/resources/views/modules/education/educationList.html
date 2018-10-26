@@ -1,0 +1,110 @@
+<% layout('/layouts/default.html', {title: '学习经历管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('学习经历管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				
+				<a href="${ctx}/education/education/form" id="btnAdd" class="btn btn-default btnTool" title="${text('新增学习经历')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${education}" action="${ctx}/education/education/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<#form:hidden path="baseInfoId"/>
+				
+				<div class="form-group">
+					<label class="control-label">${text('起始年月')}：</label>
+					<div class="control-inline">
+						<#form:input path="startDate" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('终止年月')}：</label>
+					<div class="control-inline">
+						<#form:input path="endDate" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('毕业学校')}：</label>
+					<div class="control-inline">
+						<#form:input path="school" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('学历')}：</label>
+					<div class="control-inline">
+						<#form:input path="education" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('学位')}：</label>
+					<div class="control-inline">
+						<#form:input path="degree" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('学制')}：</label>
+					<div class="control-inline">
+						<#form:input path="educationSystem" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('专业')}：</label>
+					<div class="control-inline">
+						<#form:input path="specialty" maxlength="32" class="form-control width-120"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+var bsId, personName;
+$(document).ready(function(){
+	var url = window.location.href;
+	var para = url.split("?");
+	var paras = para[1].split('&');
+	bsId = paras[0].split('baseInfoId=')[1];		
+	personName = paras[1].split('personName=')[1];
+	$("#btnAdd").attr("href","${ctx}/education/education/form?baseInfoId="+$("#baseInfoId").val()+"&personName="+personName); 
+});
+
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [		
+		{header:'${text('起始年月')}', name:'startDate', index:'a.start_date', width:150, align:"left"},
+		{header:'${text('终止年月')}', name:'endDate', index:'a.end_date', width:150, align:"left"},
+		{header:'${text('毕业学校')}', name:'school', index:'a.school', width:150, align:"left"},
+		{header:'${text('学历')}', name:'education', index:'a.education', width:150, align:"left"},
+		{header:'${text('学位')}', name:'degree', index:'a.degree', width:150, align:"left"},
+		{header:'${text('学制')}', name:'educationSystem', index:'a.education_system', width:150, align:"left"},
+		{header:'${text('专业')}', name:'specialty', index:'a.specialty', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			
+			actions.push('<a href="${ctx}/education/education/form?id='+row.id+'&opt=detailEdit" class="btnList" title="${text('编辑学习经历')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+			actions.push('<a href="${ctx}/education/education/delete?id='+row.id+'" class="btnList" title="${text('删除学习经历')}" data-confirm="${text('确认要删除该学习经历吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+		
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

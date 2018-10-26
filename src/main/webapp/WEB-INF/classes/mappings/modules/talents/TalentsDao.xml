@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.talents.dao.TalentsDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="Talents">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	
+	<insert id="insertTalents" keyProperty="id" useGeneratedKeys="true">
+		insert into Talents(base_info_id,beselected_time,project_name,level,award_unit,is_enable,create_by,create_time)
+		values  (#{baseInfoId},#{beselectedTime},#{projectName},#{level},#{awardUnit},#{isEnable},#{createBy},#{createTime})
+		
+	</insert>
+</mapper>
